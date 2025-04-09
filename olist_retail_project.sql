@@ -145,7 +145,6 @@ WITH translated_data AS (
       WHEN 'artigos_de_natal' THEN 'Christmas Items'
       WHEN 'audio' THEN 'Audio'
       WHEN 'automotivo' THEN 'Automotive'
-      -- Add the rest of your translations here
       ELSE 'Other'
     END AS product_category_english
   FROM `retail-analytics-portfolio.retail_data.olist_master_translated`
