@@ -1,61 +1,40 @@
-CREATE OR REPLACE TABLE `retail-analytics-portfolio.retail_data.olist_master_translated` AS
+CREATE OR REPLACE TABLE `retail-analytics-portfolio.retail_data.olist_final_cleaned` AS
 SELECT
   order_id,
   customer_id,
-  region,
-  CASE
-    WHEN order_status = 'entregue' THEN 'delivered'
-    WHEN order_status = 'cancelado' THEN 'cancelled'
-    WHEN order_status = 'nao_entregue' THEN 'not delivered'
-    WHEN order_status = 'processando' THEN 'processing'
-    ELSE order_status
-  END AS order_status_translated,
-  order_purchase_timestamp,
-  order_approved_at,
-  order_delivered_carrier_date,
-  order_delivered_customer_date,
-  order_estimated_delivery_date,
-  product_id,
-  freight_value,
-  product_category,
-  price,
-  review,
-  payment_method
-FROM `retail-analytics-portfolio.retail_data.olist_master_clean`;
 
-SELECT 
-  order_id,
-  customer_id,
   region AS region_code,
   CASE region
-    WHEN 'SP' THEN 'São Paulo'
-    WHEN 'RJ' THEN 'Rio de Janeiro'
-    WHEN 'MG' THEN 'Minas Gerais'
-    WHEN 'BA' THEN 'Bahia'
-    WHEN 'RS' THEN 'Rio Grande do Sul'
-    WHEN 'PR' THEN 'Paraná'
-    WHEN 'SC' THEN 'Santa Catarina'
-    WHEN 'DF' THEN 'Distrito Federal'
-    WHEN 'GO' THEN 'Goiás'
-    WHEN 'PE' THEN 'Pernambuco'
-    WHEN 'CE' THEN 'Ceará'
-    WHEN 'ES' THEN 'Espírito Santo'
-    WHEN 'PA' THEN 'Pará'
-    WHEN 'MA' THEN 'Maranhão'
-    WHEN 'MT' THEN 'Mato Grosso'
-    WHEN 'MS' THEN 'Mato Grosso do Sul'
+    WHEN 'AC' THEN 'Acre'
+    WHEN 'AL' THEN 'Alagoas'
+    WHEN 'AP' THEN 'Amapá'
     WHEN 'AM' THEN 'Amazonas'
+    WHEN 'BA' THEN 'Bahia'
+    WHEN 'CE' THEN 'Ceará'
+    WHEN 'DF' THEN 'Distrito Federal'
+    WHEN 'ES' THEN 'Espírito Santo'
+    WHEN 'GO' THEN 'Goiás'
+    WHEN 'MA' THEN 'Maranhão'
+    WHEN 'MG' THEN 'Minas Gerais'
+    WHEN 'MS' THEN 'Mato Grosso do Sul'
+    WHEN 'MT' THEN 'Mato Grosso'
+    WHEN 'PA' THEN 'Pará'
+    WHEN 'PB' THEN 'Paraíba'
+    WHEN 'PE' THEN 'Pernambuco'
+    WHEN 'PI' THEN 'Piauí'
+    WHEN 'PR' THEN 'Paraná'
+    WHEN 'RJ' THEN 'Rio de Janeiro'
+    WHEN 'RN' THEN 'Rio Grande do Norte'
+    WHEN 'RO' THEN 'Rondônia'
+    WHEN 'RR' THEN 'Roraima'
+    WHEN 'RS' THEN 'Rio Grande do Sul'
+    WHEN 'SC' THEN 'Santa Catarina'
+    WHEN 'SE' THEN 'Sergipe'
+    WHEN 'SP' THEN 'São Paulo'
+    WHEN 'TO' THEN 'Tocantins'
     ELSE 'Other'
-  END AS region_full
-FROM `retail-analytics-portfolio.retail_data.olist_master_translated`
-LIMIT 20;
+  END AS region_full,
 
-SELECT DISTINCT product_category
-FROM `retail-analytics-portfolio.retail_data.olist_master_translated`
-ORDER BY product_category;
-
-SELECT 
-  *,
   CASE product_category
     WHEN 'agro_industria_e_comercio' THEN 'Agribusiness and Commerce'
     WHEN 'alimentos' THEN 'Food'
@@ -128,62 +107,18 @@ SELECT
     WHEN 'telefonia' THEN 'Telephony'
     WHEN 'telefonia_fixa' THEN 'Landline Phones'
     ELSE 'Other'
-  END AS product_category_english
+  END AS product_category_english,
+
+  CASE payment_method
+    WHEN 'credit_card' THEN 'Credit Card'
+    WHEN 'debit_card' THEN 'Debit Card'
+    WHEN 'boleto' THEN 'Boleto (Bank Slip)'
+    WHEN 'voucher' THEN 'Voucher'
+    WHEN 'not_defined' THEN 'Not Defined'
+    ELSE 'Other'
+  END AS payment_method_english
+
 FROM `retail-analytics-portfolio.retail_data.olist_master_translated`;
 
-WITH translated_data AS (
-  SELECT
-    product_category,
-    ROUND(SUM(price), 2) AS price,
-    CASE product_category
-      WHEN 'agro_industria_e_comercio' THEN 'Agro Industry & Commerce'
-      WHEN 'alimentos' THEN 'Food'
-      WHEN 'alimentos_bebidas' THEN 'Food & Beverages'
-      WHEN 'artes' THEN 'Arts'
-      WHEN 'artes_e_artesanato' THEN 'Arts & Crafts'
-      WHEN 'artigos_de_festas' THEN 'Party Supplies'
-      WHEN 'artigos_de_natal' THEN 'Christmas Items'
-      WHEN 'audio' THEN 'Audio'
-      WHEN 'automotivo' THEN 'Automotive'
-      ELSE 'Other'
-    END AS product_category_english
-  FROM `retail-analytics-portfolio.retail_data.olist_master_translated`
-  GROUP BY product_category
-)
-
-SELECT
-  product_category_english,
-  ROUND(SUM(price), 2) AS total_revenue
-FROM translated_data
-GROUP BY product_category_english
-ORDER BY total_revenue DESC;
-
-SELECT
-  product_category,
-  COUNT(order_id) AS total_orders
-FROM `retail-analytics-portfolio.retail_data.olist_master_translated`
-GROUP BY product_category
-ORDER BY total_orders DESC
-LIMIT 10;
-
-SELECT
-  region,
-  COUNT(order_id) AS total_orders
-FROM `retail-analytics-portfolio.retail_data.olist_master_translated`
-GROUP BY region
-ORDER BY total_orders DESC;
-
-SELECT
-  product_category,
-  ROUND(AVG(review), 2) AS avg_review_score
-FROM `retail-analytics-portfolio.retail_data.olist_master_translated`
-GROUP BY product_category
-ORDER BY avg_review_score DESC
-LIMIT 10;
-
-SELECT
-  payment_method,
-  COUNT(order_id) AS total_orders
-FROM `retail-analytics-portfolio.retail_data.olist_master_translated`
-GROUP BY payment_method
-ORDER BY total_orders DESC;
+SELECT * 
+FROM `retail-analytics-portfolio.retail_data.olist_final_cleaned`
