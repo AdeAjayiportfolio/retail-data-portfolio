@@ -15,9 +15,6 @@
 - Strongest Regions: São Paulo, Rio de Janeiro
 - Most Popular Payment: Credit Card
 
-## 📸 Dashboard Preview
-![Dashboard Screenshot](./your-image.png)
-
 ## 🧠 Purpose
 Created as part of my data portfolio to showcase skills in:
 - Data transformation & modeling
