@@ -1,19 +1,29 @@
-# Retail Analytics SQL Portfolio Project
+# Retail Sales Performance Dashboard (Brazil)
 
-This project explores retail sales data using SQL on Google BigQuery.  
-It includes data translation, cleaning, and analytical queries on product categories, revenue, regions, and payment methods.
+📊 A Power BI dashboard project analyzing Brazilian eCommerce sales performance.  
+🔍 Built using SQL and Power BI for data storytelling and insights.
 
-### Tools used:
-- Google BigQuery
-- SQL
-- GitHub
+## 🔧 Tools Used
+- Power BI
+- Google BigQuery / SQL
+- Excel (for cleaning)
 
-### Key insights:
-- Top 10 product categories by revenue
-- Regional order distribution
-- Average review score by category
-- Payment method analysis
+## 📌 Key Insights
+- Total Orders: 87.3K
+- Total Revenue: R$ 11M
+- Highest Selling Categories: Tablets, DVDs & Blu-ray
+- Strongest Regions: São Paulo, Rio de Janeiro
+- Most Popular Payment: Credit Card
+
+## 📸 Dashboard Preview
+![Dashboard Screenshot](./your-image.png)
+
+## 🧠 Purpose
+Created as part of my data portfolio to showcase skills in:
+- Data transformation & modeling
+- DAX calculations
+- Storytelling with Power BI
 
 ---
 
-Created by Adebamibo Ajayi
+👤 Built by [Ade Ajayi](https://www.linkedin.com/in/ade-ajayi) | April 2025
