@@ -1,8 +1,10 @@
+-- Create the final cleaned dataset with translated and enriched fields
 CREATE OR REPLACE TABLE `retail-analytics-portfolio.retail_data.olist_final_cleaned` AS
 SELECT
   order_id,
   customer_id,
 
+  -- Region translation
   region AS region_code,
   CASE region
     WHEN 'AC' THEN 'Acre'
@@ -35,6 +37,7 @@ SELECT
     ELSE 'Other'
   END AS region_full,
 
+  -- Product category translation
   CASE product_category
     WHEN 'agro_industria_e_comercio' THEN 'Agribusiness and Commerce'
     WHEN 'alimentos' THEN 'Food'
@@ -109,6 +112,7 @@ SELECT
     ELSE 'Other'
   END AS product_category_english,
 
+  -- Payment method translation
   CASE payment_method
     WHEN 'credit_card' THEN 'Credit Card'
     WHEN 'debit_card' THEN 'Debit Card'
@@ -120,5 +124,6 @@ SELECT
 
 FROM `retail-analytics-portfolio.retail_data.olist_master_translated`;
 
+-- Preview the final dataset
 SELECT * 
-FROM `retail-analytics-portfolio.retail_data.olist_final_cleaned`
+FROM `retail-analytics-portfolio.retail_data.olist_final_cleaned`;
